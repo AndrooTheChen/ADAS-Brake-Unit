@@ -1,0 +1,69 @@
+<html>
+   <head>
+
+   <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+     
+      <script>
+
+        // Define a function that will make an AJAX call to update the head unit image
+        function fetchHeadUnitImageAsync(){
+          $.ajax({
+            url: "http://localhost:8080/data/image",
+            type: "GET",
+            crossDomain: true,
+            success: function(data) {
+              var base64str = data;
+              var imageElement = document.getElementById("head-unit-image");
+              imageElement.setAttribute('src', 'data:image/jpeg;base64,' + base64str);
+            }
+         });
+
+        }
+
+        function fetchHeadUnitBrakeAsync(){
+          $.ajax({
+            url: "http://localhost:8080/data/brake",
+            type: "GET",
+            crossDomain: true,
+            success: function(data) {
+              var distanceElement = document.getElementById("head-unit-distance");
+              distanceElement.innerHTML = "Distance (cm) " + data['distance'];
+            }
+         });
+
+        }
+
+      
+
+      
+        $(document).ready(function(){
+          console.log("DOM READY");
+
+          // Have the head unit poll the image every k ms
+          setInterval(fetchHeadUnitImageAsync, 1000);
+
+          // Have the head unit poll the distance every k ms
+          setInterval(fetchHeadUnitBrakeAsync, 500);
+        });
+      </script>
+      
+   </head>
+   
+   <body style="background-color: white; font-family: sans-serif;">
+        <p style="font-size:15mm; color: black;  text-align: center">Aayyy Komrade</p>
+            <div style = "display: inline-block; position: relative; left: 80 px; height:70%; width:50%;">
+               <img height = 100% width = 100%, id="head-unit-image">
+            </div>
+            <div style = "display: inline-block; position: absolute; top: -1000 px;">
+            <ul style="font-size: 30px">
+               <li id="head-unit-distance">
+                    The distance:
+               </li>
+            </ul>
+            </div>
+   </body>
+</html>
+
